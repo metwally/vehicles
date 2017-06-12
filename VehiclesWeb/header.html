@@ -1,0 +1,94 @@
+<div id="header">
+    <div id='clock' class="clock">
+    <div id='loadding'>Dashboard is loading ...</div>
+    <div id= "datelabel" class="glow">Last Received Status Time</div>
+    <div id="Date"></div>
+      <ul>
+          <li id="hours"></li>
+          <li id="point1"></li>
+          <li id="min"></li>
+          <li id="point2"></li>
+          <li id="sec"></li>
+      </ul>
+    </div>
+</div>
+
+<script>
+    function refreshDate(){
+        if(document.getElementById('loadding') != null){
+            $('#loadding').remove();
+            $('#datelabel').show();
+        }
+
+        if(document.getElementById('clock') != null){
+            var monthNames = [ "January","February","March","April","May","June","July","August","September","October","November","December" ];
+            var dayNames= ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+            var newDate = new Date();
+            newDate.setDate(newDate.getDate());
+            $('#point1').html(':');
+            $('#point2').html(':');
+            $('#Date').html(dayNames[newDate.getDay()] + " " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' + newDate.getFullYear());
+            var seconds = newDate.getSeconds();
+            $("#sec").html(( seconds < 10 ? "0" : "" ) + seconds);
+            var minutes = newDate.getMinutes();
+            $("#min").html(( minutes < 10 ? "0" : "" ) + minutes);
+            var hours = newDate.getHours();
+            $("#hours").html(( hours < 10 ? "0" : "" ) + hours);
+        }
+    }
+</script>
+
+<style>
+    #header{
+        height: 60px;
+        display:block;
+        margin-button: 10px;
+    }
+
+    #logo{
+        width: 250px;
+        height: 40px;
+        margin: 0 auto;
+        padding: 10px;
+        float:left;
+        box-sizing: border-box;
+    }
+
+    .clock {
+        width: 250px;
+        height: 40px;
+        margin: 0 auto;
+        padding: 10px;
+        color: #fff;
+        font-family: Arial, Helvetica, sans-serif;
+        float: right;
+        display: block;
+    }
+    #Date, .glow {
+        font-size: 14px;
+        text-align: center;
+        text-shadow: 0 0 5px #00c6ff;
+        min-height: 16px;
+    }
+    #datelabel {
+        display: none;
+    }
+    #clock ul {
+        margin: 0 auto;
+        padding: 10px;
+        list-style: none;
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    #clock ul li {
+        display: inline;
+        text-align: center;
+        text-shadow: 0 0 5px #00c6ff;
+    }
+    #point1 #point2 {
+        position: relative;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+</style>

@@ -1,0 +1,193 @@
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="timers.js"></script>
+<script>
+    $('document').ready(function(){
+
+        $.get('header.html')
+            .success(function(data) {
+                $('#headerPlaceHolder').html(data);
+        });
+
+        var datagrid = $('#vehicles');
+        var table = $('<table id="tblstatus"></table>');
+        var header = $("<thead/>");
+        var headerRow = $('<tr><th>Customer Id</th><th>Vehicle Id</th><th>Last status</th><th>Status Time</th></tr>');
+        var div = $('<div class="host"><span>Vehicles .. Live</span></div>');
+
+        header.append(headerRow);
+        table.append(header);
+        datagrid.append(div);
+        datagrid.append(table);
+
+    });
+
+    function refreshDate(){
+        if(document.getElementById('loadding') != null){
+            $('#loadding').html('Last Refresh: ' + (new Date()));
+        }
+    }
+
+
+    var uri = "ws://localhost:5000/ws";
+    var socket = new WebSocket(uri);
+
+    socket.onopen = function(event) {
+        console.log("opened connection to " + uri);
+    };
+    socket.onclose = function(event) {
+        console.log("closed connection from " + uri);
+    };
+    socket.onerror = function(event) {
+        console.log("error: " + event.data);
+    };
+
+    socket.onmessage = function(event) {
+        console.log(event.data);
+        try {
+            var data = JSON.parse(event.data);
+        } catch (ex){
+            //console.log(ex.message);
+            return;
+        }
+        refreshDate();
+
+        var row_html = '<tr id="row_' + data["VehicleID"] + '"/>';
+
+        if(document.getElementById('row_'+ data["VehicleID"]) != null){
+            var row = $('#' + 'row_'+ data["VehicleID"]);
+            row.html('');
+            row.removeClass('red');
+            row.removeClass('warn');
+            row.removeClass('green');
+            row.removeClass('dim');
+        } else {
+            var row = $(row_html);
+            var table = $('#tblstatus');
+            table.append(row);
+        }
+
+        
+        
+        if(data["Status"].toLowerCase() == 'off') {
+            row.addClass('red');
+        }
+        else if(data["Status"].toLowerCase() == 'na' ) {
+            row.addClass('dim');
+        }
+
+        row.append($("<td/>").text(data["CustomerID"]));
+        row.append($("<td/>").text(data["VehicleID"]));
+        row.append($("<td/>").text(data["Status"]));
+        row.append($("<td/>").text(data["StatusTime"]));
+
+        starttimer_vehicles(data["VehicleID"]);
+
+    };
+    
+
+
+</script>
+
+<div id="headerPlaceHolder"></div>
+<div class="btn"><a href="/history">Go To History</a></div>
+</br>
+<div id='vehicles' class="datagrid"></div>
+
+
+<style type="text/css">
+
+body{
+    background-color: #161616;
+    color: #FFFFFF;
+}
+
+.datagrid table { border-collapse: collapse; text-align: left; width: 100%; }
+
+.datagrid
+{
+	font: normal 12px Arial, Helvetica, sans-serif;
+	background: #fff;
+	overflow: hidden; border: 1px solid #006699;
+	-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;
+	margin: 5px;
+
+    min-height:110px;
+    min-width:400px;
+    max-width: 600px;   
+}
+
+.datagrid table td, .datagrid table th { padding: 3px 10px; }
+
+.datagrid table thead th
+{
+	background-color:#006699; color:#FFFFFF; font-size: 12px; border-left: 1px solid #0070A8;
+	font-weight: normal;
+}
+
+.datagrid table thead th:first-child { border: none; }
+.datagrid table tbody td { color: #00557F; border-left: 1px solid #E1EEF4;font-size: 12px;font-weight: normal; }
+.datagrid table tbody td:first-child { border-left: none; }
+.datagrid table tbody tr:last-child td { border-bottom: none; }
+
+.datagrid table tbody .red td { background: #FF0000; color: #FFFFFF; }
+.datagrid table tbody .warn td { background: #FFFF00; color: #000000; }
+.datagrid table tbody .dim td { background: #DDDDDD; color: #AAAAAA; }
+
+.red { background: #FF0000 !important; color: #FFFFFF !important; }
+.warn { background: #FFFF00 !important; color: #000000 !important; }
+.dim { background: #DDDDDD !important; color: #AAAAAA !important; }
+
+.host
+{
+	color: #FFFFFF;
+	background-color:#006699;
+	font-size: 15px;
+	border-left: 1px solid #0070A8;
+	text-align: center;
+	padding:5px;
+}
+
+.host a
+{
+	color: #FFFFFF;
+	text-decoration: none;
+	font-weight: bold;
+}
+.host a:hover
+{
+	text-decoration: underline;
+}
+
+.btn,
+.btn:visited
+{
+    display: inline-block;
+    padding: 0.3em 0.6em 0.375em;
+    border: 1px solid #999;
+    border-bottom-color: #888;
+    margin: 0;
+    margin-left: -1px;
+    text-decoration:none;
+    text-align: center;
+    cursor:pointer;
+    color: #333;
+    background-color: #eee;
+    background-image: linear-gradient(#f5f6f6, #e4e4e3);
+    box-shadow: 0 1px rgba(0,0,0,0.1), inset 0 1px 0 #fff;
+}
+
+.btn:hover
+{
+    border-color: #777 #777 #666;
+}
+
+.btn:active
+{
+    border-color: #aaa;
+    background: #ddd;
+    box-shadow:none;
+
+}
+
+
+</style>

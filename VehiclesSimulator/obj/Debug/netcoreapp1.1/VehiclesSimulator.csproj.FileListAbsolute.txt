@@ -1,0 +1,8 @@
+e:\scratches\Vehicles\VehiclesSimulator\bin\Debug\netcoreapp1.1\VehiclesSimulator.deps.json
+e:\scratches\Vehicles\VehiclesSimulator\bin\Debug\netcoreapp1.1\VehiclesSimulator.runtimeconfig.json
+e:\scratches\Vehicles\VehiclesSimulator\bin\Debug\netcoreapp1.1\VehiclesSimulator.runtimeconfig.dev.json
+e:\scratches\Vehicles\VehiclesSimulator\bin\Debug\netcoreapp1.1\VehiclesSimulator.dll
+e:\scratches\Vehicles\VehiclesSimulator\bin\Debug\netcoreapp1.1\VehiclesSimulator.pdb
+e:\scratches\Vehicles\VehiclesSimulator\obj\Debug\netcoreapp1.1\VehiclesSimulator.AssemblyInfo.cs
+e:\scratches\Vehicles\VehiclesSimulator\obj\Debug\netcoreapp1.1\VehiclesSimulator.dll
+e:\scratches\Vehicles\VehiclesSimulator\obj\Debug\netcoreapp1.1\VehiclesSimulator.pdb

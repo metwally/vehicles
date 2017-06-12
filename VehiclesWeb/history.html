@@ -1,0 +1,244 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+<script>
+    $('document').ready(function(){
+
+		// $.get('header.html')
+		// .success(function(data) {
+		// 	$('#headerPlaceHolder').html(data);
+		// });
+        var datagrid = $('#vehicles');
+        var table = $('<table id="tblstatus"></table>');
+        var header = $("<thead/>");
+        var headerRow = $('<tr><th>Customer Id</th><th>Vehicle Id</th><th>Last status</th><th>Status Time</th></tr>');
+        var div = $('<div class="host"><span>Vehicles .. History</span></div>');
+
+        header.append(headerRow);
+        table.append(header);
+        datagrid.append(div);
+        datagrid.append(table);
+
+        var customers = [
+            {"name" : "ALL", "Id" : undefined},
+            {"name" : "Kalles Grustransporter", "Id" : "1"},
+            {"name" : "Johans Bulk", "Id" : "2"},
+            {"name" : "Haralds Värdetransporter", "Id" : "3"}
+        ];
+
+        var vehicles = [
+            {"customer_id" : "1", "vehicle_id" : "YS2R4X20005399401"},
+            {"customer_id" : "1", "vehicle_id" : "VLUR4X20009093588"},
+            {"customer_id" : "1", "vehicle_id" : "VLUR4X20009048066"},
+
+            {"customer_id" : "2", "vehicle_id" : "YS2R4X20005388011"},
+            {"customer_id" : "2", "vehicle_id" : "YS2R4X20005387949"},
+
+            {"customer_id" : "3", "vehicle_id" : "YS2R4X20005387765"},
+            {"customer_id" : "3", "vehicle_id" : "YS2R4X20005387055"},
+        ];
+
+        var lstcustomers = $("#lstcustomers");
+        var lstvehicles = $("#lstvehicles");
+        
+        lstvehicles.append('<option value=undefined>ALL</option>');
+
+        for(i=0; i< customers.length; i++){
+            lstcustomers.append('<option value=' + customers[i].Id + '>' + customers[i].name + '</option>');
+        };
+
+        lstcustomers.change(function(){
+            console.log('lstcustomers.change');
+            console.log(this.value);
+            if(this.value){
+                lstvehicles.html('');
+                lstvehicles.append('<option value=undefined>ALL</option>');
+                for(i=0; i< vehicles.length; i++){
+                    if(vehicles[i].customer_id == this.value){
+                        lstvehicles.append('<option value=' + vehicles[i].vehicle_id + '>' + vehicles[i].vehicle_id + '</option>');
+                    }
+                };      
+            }
+        });
+        
+
+
+	}); //end of ready
+
+    function search(){
+        console.log('start search');
+        
+        var lstcustomers = $("#lstcustomers");
+        
+		var selectedCustomer = lstcustomers.val();
+        
+        var lstvehicles = $("#lstvehicles");
+        var selectedVehicle = lstvehicles.val();
+        console.log(selectedVehicle);
+
+        var url = 'http://localhost:5000';
+
+        if (selectedVehicle != undefined && selectedVehicle != "undefined") {
+            url += '/api/vehicles/vehicle/' + selectedVehicle;
+        } else if (selectedCustomer  != undefined && selectedCustomer != "undefined") {
+            url += '/api/vehicles/customer/' + selectedCustomer;
+        } else {
+            url += '/api/vehicles';
+        }
+
+		$.get(url, function(data){
+
+            var datagrid = $('#vehicles');
+            var table = $('<table id="tblstatus"></table>');
+            var header = $("<thead/>");
+            var headerRow = $('<tr><th>Customer Id</th><th>Vehicle Id</th><th>Last status</th><th>Status Time</th></tr>');
+            var div = $('<div class="host"><span>Vehicles .. History</span></div>');
+
+            header.append(headerRow);
+            table.append(header);
+            datagrid.html('');
+            datagrid.append(div);
+            datagrid.append(table);
+
+            
+            
+            for (i=0; i < data.length; i++){
+                var row = $("<tr " + (i % 2 == 0 ? "" : "class=\"alt\"") + "/>");
+                row.append($("<td/>").text(data[i]["customerID"]));
+                row.append($("<td/>").text(data[i]["vehicleID"]));
+                row.append($("<td/>").text(data[i]["status"]));
+                row.append($("<td/>").text(data[i]["statusTime"]));
+                table.append(row);
+            }
+            
+        });
+
+	}
+</script>
+
+<div id="headerPlaceHolder"></div>
+<div class="btn"><a href="/index">Go To Live Monitor</a></div>
+</br>
+
+<span>Get data for: </span>
+<label>Customers</label>
+<select id="lstcustomers"></select>
+
+<label>Vehicles</label>
+<select id="lstvehicles"></select>
+
+<button type="button" onclick="search();">
+    <span>Go</span>
+</button>
+
+<div id='vehicles' class="datagrid"></div>
+
+</body>
+
+<style type="text/css">
+
+body{
+    background-color: #161616;
+    color: #FFFFFF;
+}
+
+.datagrid table { border-collapse: collapse; text-align: left; width: 100%; }
+
+.datagrid
+{
+	font: normal 12px Arial, Helvetica, sans-serif;
+	background: #fff;
+	overflow: hidden; border: 1px solid #006699;
+	-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;
+	margin: 5px;
+
+    min-height:110px;
+    min-width:400px;
+    max-width: 600px;
+}
+
+.min_height_70{
+    min-height:70px !important;
+}
+.min_height_90{
+    min-height:90px !important;
+}
+
+.datagrid table td, .datagrid table th { padding: 3px 10px; }
+
+.datagrid table thead th
+{
+	background-color:#006699; color:#FFFFFF; font-size: 12px; border-left: 1px solid #0070A8;
+	font-weight: normal;
+}
+
+.datagrid table thead th:first-child { border: none; }
+.datagrid table tbody td { color: #00557F; border-left: 1px solid #E1EEF4;font-size: 12px;font-weight: normal; }
+.datagrid table tbody .alt td { background: #E1EEf4; color: #00557F; }
+.datagrid table tbody td:first-child { border-left: none; }
+.datagrid table tbody tr:last-child td { border-bottom: none; }
+
+.datagrid table tbody .red td { background: #FF0000; color: #FFFFFF; }
+.datagrid table tbody .warn td { background: #FFFF00; color: #000000; }
+.datagrid table tbody .dim td { background: #DDDDDD; color: #AAAAAA; }
+
+.red { background: #FF0000 !important; color: #FFFFFF !important; }
+.warn { background: #FFFF00 !important; color: #000000 !important; }
+.dim { background: #DDDDDD !important; color: #AAAAAA !important; }
+
+.host
+{
+	color: #FFFFFF;
+	background-color:#006699;
+	font-size: 15px;
+	border-left: 1px solid #0070A8;
+	text-align: center;
+	padding:5px;
+}
+
+.host a
+{
+	color: #FFFFFF;
+	text-decoration: none;
+	font-weight: bold;
+}
+.host a:hover
+{
+	text-decoration: underline;
+}
+
+.btn,
+.btn:visited
+{
+    display: inline-block;
+    padding: 0.3em 0.6em 0.375em;
+    border: 1px solid #999;
+    border-bottom-color: #888;
+    margin: 0;
+    margin-left: -1px;
+    text-decoration:none;
+    text-align: center;
+    cursor:pointer;
+    color: #333;
+    background-color: #eee;
+    background-image: linear-gradient(#f5f6f6, #e4e4e3);
+    box-shadow: 0 1px rgba(0,0,0,0.1), inset 0 1px 0 #fff;
+}
+
+.btn:hover
+{
+    border-color: #777 #777 #666;
+}
+
+.btn:active
+{
+    border-color: #aaa;
+    background: #ddd;
+    box-shadow:none;
+
+}
+
+</style>
+
+<html>
