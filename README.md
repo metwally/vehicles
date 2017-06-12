@@ -54,18 +54,13 @@ or all data for one vehicle.
 
 # Run Instructions:
 1. start VehiclesCore first
+
 2. then start VehiclesWeb .. you can run it on any web server. for sake of simplicity you can install http-server via npm [node.js package manager]. 
-
 install npm first if you don't have it. https://www.npmjs.com/
-
 then run this command from OS terminal:
-
-npm i -g http-server
-
+`npm i -g http-server`
 to run VehiclesWeb navigate to its directory from terminal then run this command:
-
-http-server -p 5500
-
+`http-server -p 5500`
 this will run the web app on port 5500.
 
 3. run VehiclesSimulator .. now for each Enter you will press from VehiclesSimulator terminal, a random vehicle data will be sent to VehiclesCore.
