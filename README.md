@@ -4,9 +4,9 @@ system will receive status from vehicle then display it and save it to sqlite db
 user can view real time status via web page.
 user can view status history via web page.
 
-_*Kindly, Take a look to PrtScr directory before start.*_
+***Kindly, Take a look to PrtScr directory before start.***
 
-# System Services::
+# System Services:
 
 ## VehiclesCore:
 the core service .. provide websocket connection for all vehicles.
@@ -15,9 +15,13 @@ or vehicle can send Http Post request instead.
 core service run on port 5000
 websocket path is ws://localhost:5000/ws
 
-### core service provide some APIs:
-1. POST http://localhost:5000/vehicles
+### core service APIs:
+1. GET http://localhost:5000/vehicles
+retrieve all vechicles from database
+
+2. POST http://localhost:5000/vehicles
 to send vehicle status
+
 body example:
 {
 	"CustomerID" : "1",
@@ -25,10 +29,10 @@ body example:
 	"Status" : "On"
 }
 
-2. GET http://localhost:5000/vehicles/vehicle/{vehicle_id}
+3. GET http://localhost:5000/vehicles/vehicle/{vehicle_id}
 to retrieve specific vehicle data from database
 
-2. GET http://localhost:5000/vehicles/customer/{customer_id}
+4. GET http://localhost:5000/vehicles/customer/{customer_id}
 to retrieve specific customer vehicles data from database
 
 
@@ -51,11 +55,18 @@ or all data for one vehicle.
 # Run Instructions:
 1. start VehiclesCore first
 2. then start VehiclesWeb .. you can run it on any web server. for sake of simplicity you can install http-server via npm [node.js package manager]. 
+
 install npm first if you don't have it. https://www.npmjs.com/
+
 then run this command from OS terminal:
+
 npm i -g http-server
+
 to run VehiclesWeb navigate to its directory from terminal then run this command:
+
 http-server -p 5500
+
 this will run the web app on port 5500.
+
 3. run VehiclesSimulator .. now for each Enter you will press from VehiclesSimulator terminal, a random vehicle data will be sent to VehiclesCore.
 you should be able to see real time data arrive to index.html page.
