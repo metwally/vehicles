@@ -8,7 +8,7 @@ using VehiclesCore;
 namespace VehiclesCore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20170610125400_InitialCreate")]
+    [Migration("20170612130650_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
